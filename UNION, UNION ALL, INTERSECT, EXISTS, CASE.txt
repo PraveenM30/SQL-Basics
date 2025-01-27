@@ -1,0 +1,49 @@
+# Miscelleneous SQL Keywords like : UNION, UNION ALL, INTERSECT, EXISTS, CASE
+
+use mydb;
+create table college (id int(50),name varchar(50));
+INSERT INTO college VALUES (53,'tim');
+INSERT INTO college VALUES (643,'ben');
+INSERT INTO college VALUES (223,'tam');
+INSERT INTO college VALUES (574,'sam');
+INSERT INTO college VALUES (422,'ram');
+INSERT INTO college VALUES (983,'joe');
+INSERT INTO college VALUES (5399,'ten');
+INSERT INTO college VALUES (5399,'ten');
+INSERT INTO college VALUES (574,'Null');
+INSERT INTO college VALUES (666,'praveen');
+INSERT INTO college VALUES (600,'virat');
+select * from college;
+
+
+create table results (id int(50),name varchar(50));
+INSERT INTO results VALUES (9893,'tina');
+INSERT INTO results VALUES (53,'tim');
+INSERT INTO results VALUES (24,'harsh');
+INSERT INTO results VALUES (223,'tam');
+INSERT INTO results VALUES (42322,'sam');
+INSERT INTO results VALUES (887,'jack');
+INSERT INTO results VALUES (5444,'ten');
+INSERT INTO results VALUES (101010,'jackSparrow');
+INSERT INTO results VALUES (600,'virat');
+select * from results;
+
+#UNION : combines 2 sets by removing duplicates
+select * from college union (select * from results);
+
+#UNION ALL : combines 2 sets without removing duplicates
+select * from college union All(select * from results);
+
+#InterSect in MYSQL we cant use InterSect so below query will be used
+select * from college where id in(select id from results);
+
+#EXISTS : if subQuery is true then query will execute
+select * from college where Exists (select * from college where name='praveen');
+
+#CASE : used to perform conditional logic within query like If-Else and SWITCH statement.
+select id,case name
+when 'tim' then id-50
+when 'virat' then id-582
+else id
+end
+'NewId',name from college;

@@ -1,0 +1,104 @@
+#FOREIGN key
+
+A foreign key is a column or a set of columns in a relational database table that creates a link between the data in two tables. It is used to 
+enforce referential integrity by ensuring that the value in the foreign key column(s) matches a value in the referenced tables primary key 
+or unique key column(s).
+
+create table customerDetails(
+customerId int(50),
+address varchar(50),
+zipcode int(5),
+primary key(customerId));
+
+create table orderDetails(
+orderId int(50),
+customerId int(50),
+amount int(5),
+date varchar(10),
+primary key(orderId),
+foreign key(customerId) references customerDetails(customerId));
+
+Insert into customerDetails values(12345,'bangalore',577566);
+Insert into customerDetails values(123,'bangalore',577566);
+Insert into orderDetails values(87652,1234,9999,'24th jan'); //Invalid: bcs customer id does not match in both table i.e i cant place order for non existing customer.
+Insert into orderDetails values(87652,12345,9999,'24th jan'); //Valid: bcs there is customer with id 12345 in customerDetails table so i can place a order for him.
+Note: before ordering, customer should be added in customerDetails table
+
+# I cant delete the record from parent when there is a dependency in other/child table.
+delete from customerDetails where customerId=12345;
+delete from orderDetails where customerId=12345;
+
+#I can delete this bcs this record doesn't have dependency in order table.
+delete from customerDetails where customerId=123;
+
+create table customerDetails2(
+customerId int(50),
+address varchar(50),
+zipcode int(5),
+primary key(customerId));
+
+create table orderDetails2(
+orderId int(50),
+customerId int(50),
+amount int(5),
+date varchar(10),
+primary key(orderId),
+foreign key(customerId) references customerDetails2(customerId) On delete cascade on Update cascade);
+drop table orderDetails2;
+
+Insert into customerDetails2 values(12345,'bangalore',577566);
+Insert into orderDetails2 values(8762,12345,9999,'24th jan');
+select * from orderDetails2;
+
+# On Update Cascade
+by updating parent record/row, child row which have dependency will also update.
+update customerDetails2 set customerId=12345555 where customerId=12345;
+
+# On Delete Cascade
+When u delete the parent all its dependent child will also delete.
+delete from customerDetails2 where customerId=12345;   //by deleting parent record/row, child row which have dependency will also delete.
+
+1. Data Type Consistency
+The column(s) in the child table (the table that contains the foreign key) must have the same data type as the column(s) in the parent table
+ (the referenced table, which typically contains the primary key or unique key).
+ 
+2. Referential Integrity
+The value in the foreign key column(s) must either be NULL or must match a value in the parent table s primary key or unique key column. 
+This ensures that there is a valid relationship between the tables.
+
+3. Primary or Unique Key in the Parent Table
+The column(s) being referenced in the parent table must be a primary key or unique key. This ensures that the referenced values are unique and 
+that there is no ambiguity about what the foreign key points to.
+
+4. Cascade Rules (ON DELETE / ON UPDATE)
+You can define how changes in the parent table (e.g., a delete or update action) should affect the child table (the table with the foreign key). 
+Common actions include:
+ON DELETE CASCADE: If a record in the parent table is deleted, all corresponding rows in the child table are automatically deleted.
+ON DELETE SET NULL: If a record in the parent table is deleted, the foreign key values in the child table are set to NULL.
+ON UPDATE CASCADE: If a primary key value in the parent table is updated, the corresponding foreign key values in the child table are also updated.
+ON UPDATE SET NULL: If a primary key value in the parent table is updated, the foreign key values in the child table are set to NULL.
+ON DELETE RESTRICT (default): Prevents deletion of a record in the parent table if there are any related rows in the child table.
+
+5. NULL Values in the Foreign Key
+A foreign key column can contain NULL values. If the foreign key column contains NULL, it means there is no relationship for that particular row.
+If the foreign key column allows NULL, it doesnt enforce a relationship, so no referential integrity issues will occur.
+
+
+A foreign key constraint is a powerful feature in SQL used to establish and enforce a link between two tables. When defining a foreign key, 
+certain rules and conditions must be followed to ensure referential integrity. Below are the rules and conditions of foreign keys:
+
+6. Foreign Key Integrity Constraints in Multi-Column Foreign Keys
+A foreign key can be defined on more than one column. In this case, all foreign key columns together must match the composite primary key 
+(or unique key) in the parent table.
+
+CREATE TABLE Parent (
+    primaryKey1 INT,
+    primaryKey2 INT,
+    PRIMARY KEY (primaryKey1, primaryKey2)
+);
+
+CREATE TABLE Child (
+    foreignKey1 INT,
+    foreignKey2 INT,
+    FOREIGN KEY (foreignKey1, foreignKey2) REFERENCES Parent(primaryKey1, primaryKey2)
+);

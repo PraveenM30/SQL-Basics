@@ -1,0 +1,88 @@
+#JOINS, SQL_strings, SQL_VIEWS 
+
+joins rules and conditions:>>>>
+
+-Joins typically work based on a common column between two tables. The related column(s) should have the same data type and meaning in both tables.
+-It’s essential to specify which columns to join on, using the ON clause.
+
+insert into empcountry values ('Ram',8888,'BHARAT');
+insert into empinfo values ('Lakshman',30303,'Ayodhya',1000,'male');
+
+# JOIN: joins are used to combine rows from two or more tables based on a related column between them.
+use mydb2;
+select * from empcountry;
+select * from empinfo;
+
+#Inner join: 
+The INNER JOIN keyword selects records that have matching values in both tables.
+If there is no match between the rows in both tables, the row is not included in the result.
+
+select empcountry.name,empcountry.countryName,empinfo.age,empinfo.location from empcountry join empinfo on empcountry.name=empinfo.name;
+
+#LEFT join/LEFT OUTER join : returns all records from the left table and the matched records from the right table. If there is no match, the result
+					         is NULL from the right table.
+	
+select empcountry.name,empcountry.countryName,empinfo.age,empinfo.location from empcountry left join empinfo on empcountry.name=empinfo.name;
+
+
+#RIGHT join: returns all records from the right table and the matched records from the left table. If there is no match, NULL values will be returned 
+from the left table.
+
+select empcountry.name,empcountry.countryName,empinfo.age,empinfo.location from empcountry right join empinfo on empcountry.name=empinfo.name;
+
+# ex 2:
+use world;
+select * from city;
+select Name from city where Name='Accra';
+select * from country;
+select * from countrylanguage;
+
+#JOIN
+select c.Name,c.Population,cl.CountryCode from country as c join countrylanguage as cl on c.Code=cl.CountryCode ;
+select c.Name,c.Population,cl.CountryCode from country as c join countrylanguage as cl on c.Code=cl.CountryCode group by c.Name;
+
+#View concept : a view is a virtual table that is based on the result of a query. It is a stored SELECT statement that can be treated 
+                like a table, but it does not store data itself. Instead, it dynamically generates the result whenever it is queried.
+ ex 1:  use world;
+              
+Create view populationGreaterThan10Lakh AS
+select CountryCode,avg(population) from city group by CountryCode having avg(population)>1000000;
+select * from populationGreaterThan10Lakh;
+
+#STRINGS concept
+SELECT CONCAT('Hello', ' ', 'World');
+SELECT LENGTH('Hello');
+SELECT SUBSTRING('Hello World', 2, 4);
+SELECT LOWER('Hello');
+SELECT UPPER('Hello');
+SELECT TRIM('  Hello  ');
+SELECT REPLACE('Hello World', 'World', 'MySQL');
+
+use mydb;
+select * from praveEn;
+
+#CONCAT two column's/ given string's
+select concat(id,name) from praveen;
+select concat(id,name) as IdName from praveen;
+
+#SUBSTRING it will extract substring from string in given column.
+select substr(name,2,4) from praveen;
+
+#replace it will replace the characters.
+select replace(name,'pra','ka') from praveen where name='praveen';
+
+#LENGTH will give the length of string in given column.
+select length(name) from praveen;
+
+#LOWER will give the string in lower case.
+select lower(name) from praveen;
+
+#UPPER will give the string in upper case.
+select upper(name) from praveen;
+
+#TRIM will trim the space in begining and at the end in the given string.
+select trim('   Praveen     ');
+
+#TOP(for microsoft sql)  LIMIT(for MYSQL) will give top 1/2/3
+select name from praveen limit 1;
+

@@ -1,0 +1,53 @@
+# TABLE Insert data, create,update, delete
+
+#creating DB
+create database mydb3;
+
+#Pointing to DB
+use mydb3;
+
+#Creating Table
+Create table  EXAM_RESULTS (STUDENT_ID int(2),FIRST_NAME varchar(20), LAST_NAME varchar(20), EXAM_ID int(2), EXAM_SCORE int(3));
+
+#Add another column in table
+alter table EXAM_RESULTS add gender varchar(20);
+#Modify the column in table
+alter table EXAM_RESULTS modify gender varchar(10);
+#change the name of existing column
+ALTER TABLE EXAM_RESULTS CHANGE COLUMN country Gender VARCHAR(20);
+#delete column
+alter table EXAM_RESULTS drop gender;
+
+#Schema of Table
+describe EXAM_RESULTS; 
+
+#To insert data into table
+Insert into EXAM_RESULTS values(10,'LAURA','LYNCH',1,90);
+Insert into EXAM_RESULTS values(10,'LAURA','LYNCH',2,85);
+Insert into EXAM_RESULTS values(11,'GRACE','BROWN',1,78);
+Insert into EXAM_RESULTS values(11,'GRACE','BROWN',2,72);
+Insert into EXAM_RESULTS values(12,'JAY','JACKSON',1,95);
+Insert into EXAM_RESULTS values(12,'JAY','JACKSON',2,92);
+Insert into EXAM_RESULTS values(13,'WILLIAM','BISHOP',1,70);
+Insert into EXAM_RESULTS values(13,'WILLIAM','BISHOP',2,100);
+Insert into EXAM_RESULTS values(14,'CHARLES','PRADA',2,85,'Male');
+
+#update : is used to update the data in the table.
+update EXAM_RESULTS set gender='female' where LAST_NAME='BROWN';
+#Deletion of row.
+delete from EXAM_RESULTS where LAST_NAME='PRADA';
+#Retrieve data from table
+select STUDENT_ID,FIRST_NAME,EXAM_SCORE from EXAM_RESULTS;
+#Retrieve all column's data from table
+select * from EXAM_RESULTs; 
+
+#ALTER : is used to update the data in the table.
+#UPDATE : is used to update the schema of the table i.e(column name, dataType)
+
+
+
+
+SELECT AVG(EXAM_SCORE) FROM EXAM_RESULTS GROUP BY EXAM_ID;
+SELECT AVG(EXAM_SCORE) FROM EXAM_RESULTS WHERE EXAM_ID = 1;
+SELECT EXAM_ID, COUNT(DISTINCT STUDENT_ID) FROM EXAM_RESULTS GROUP BY EXAM_ID;
+SELECT FIRST_NAME, LAST_NAME, SUM(EXAM_SCORE) FROM EXAM_RESULTS GROUP BY FIRST_NAME, LAST_NAME HAVING SUM(EXAM_SCORE) > 180;

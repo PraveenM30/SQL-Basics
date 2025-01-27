@@ -1,0 +1,59 @@
+# WHERE, AND, OR, IN, BETWEEN, WILD CARDS(% & _)
+
+use mydb3;
+select * from exam_results;:
+
+# Distinct : gives only unique data and avoid duplicates
+select distinct first_Name from exam_Results;
+
+#WHERE keyword : is used to filter records and specify the conditions that must be met for the rows to be included in the result set of a query.
+select * from exam_Results where student_id=10;
+ 
+ 
+#AND : is a logical operator used to combine multiple conditions in a WHERE clause. It allows you to filter records that satisfy all of the 
+       specified conditions. When you use AND, every condition must be true for the row to be included in the result set.
+select * from exam_Results where student_id=10 and exam_id=1;
+
+#OR : operator is used to combine multiple conditions in a WHERE clause, but unlike AND, it returns results where at least one of the conditions
+      is true.
+select * from exam_Results where student_id=10 or student_id=11;
+
+#AND & OR
+select * from exam_results where (student_Id=11 and gender='female') or gender='male';
+
+#in : operator is used to specify multiple values in a WHERE clause. It's a shorthand way of writing multiple OR conditions, making the 
+       query cleaner and easier to read.
+select * from exam_results where gender in('male','female');
+
+#BETWEEN : Operator in SQL is used to filter records within a range of values.
+select * from exam_results where student_id between 11 and 13;
+
+#NOT BETWEEN : operator in SQL is used to filter records that do not fall within a specified range.
+select * from exam_results where student_id not between 11 and 13;
+
+
+#wild cards('%' & '_')
+#% : Matches zero or more characters.
+Example: 'A%' matches 'A', 'Alice', 'Alex', 'A123', etc.
+
+select * from exam_results;
+select * from exam_results where first_name like 'g%'; 
+//gives the name starts with 'g'
+
+select * from exam_results where first_name like '%a%'; 
+//gives the name contains 'a'
+
+select * from exam_results where first_name like '%e'; 
+// gives the name that has last letter as 'e'
+
+# _ : Matches exactly one character.
+Example: 'A_' matches 'An', 'Al', 'Ax', etc. (but not 'A' or 'Alice').
+
+select * from exam_results where first_name like 'g____'; 
+//gives the name contains first letter as 'g' out of 5 letter
+
+select * from exam_results where first_name like 'W_ll_a_'; 
+// gives the names which has 'w'as first letter and 'll' as 3rd and 4th letter and 'a' as 6th letter out of 7 letter.
+
+select * from exam_results where first_name like '_ay'; 
+// gives the name which as 'ay' as 2nd and 3rd letter out of 3 letter.

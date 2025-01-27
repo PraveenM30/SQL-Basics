@@ -1,0 +1,122 @@
+#SQL Constraints
+
+-SQL constraints are rules applied to columns or tables to ensure the accuracy and integrity of data in a relational database.
+-They help enforce data validity and ensure that the data stored meets specific conditions.
+
+create table flightDetails(flightName varchar(20),flightId integer not null);
+create table flightDetails1(flightName varchar(20),flightId int);
+describe flightDetails1;
+insert into flightDetails values('flight1',001);
+insert into flightDetails1 values('flight1',null);
+select * from flightDetails1;
+
+#In SQL, the NULL and NOT NULL constraints are used to define whether a column can store NULL values or not.
+# NULL Constraint:
+-The NULL constraint allows a column to accept NULL values, which represent missing, unknown, or undefined data.
+-If a column is not explicitly defined with a NOT NULL constraint, it can hold NULL values by default.
+CREATE TABLE Employees (
+    EmployeeID INT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DateOfBirth DATE
+);
+In this example, the columns EmployeeID, FirstName, LastName, and DateOfBirth are allowed to hold NULL values.
+
+#NOT NULL Constraint:
+The NOT NULL constraint ensures that a column cannot store NULL values.
+When this constraint is applied to a column, every row in that column must have a valid value.
+
+Example:
+CREATE TABLE Employees (
+    EmployeeID INT NOT NULL,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50),
+    DateOfBirth DATE
+);
+In this example:
+
+EmployeeID and FirstName columns cannot contain NULL values.
+LastName and DateOfBirth columns can store NULL values if no value is provided.
+
+#DEFAULT constraints:
+Is used to set a default value for a column when no value is provided during an insert operation.
+
+use mydb;
+create table flightDetails2(flightName varchar(20),flightId int default 300);
+describe flightDetails2;
+insert into flightDetails2 values('flight4');
+
+#Rule 1:
+1. DEFAULT constraints are useful when the column allows NULL or is not explicitly NOT NULL.
+
+INSERT INTO flightDetails2 (flightName) VALUES ('flight4');
+select * from flightDetails2;
+
+
+#Rule 2:
+2. Columns defined as primary keys or unique constraints cannot have a DEFAULT value because it might violate the uniqueness or non-NULL requirement.
+
+#Rule 3:
+3. For a NOT NULL column,  if you dont provide a default value, you need to ensure that a value is always inserted, as MySQL will not allow a NULL 
+value unless explicitly specified as allowed.
+
+#This is invalid one
+create table flightDetails3(flightName varchar(20),flightId int not null);
+insert into flightDetails3 values('flight3');
+
+#This is valid one
+insert into flightDetails3 values('flight3',333);
+or
+alter table flightDetails3 modify flightID int not null default 33;
+insert into flightDetails3(flightName) values('flight3');
+select * from flightDetails3;
+
+#Rule 4:
+4. You can use a DEFAULT value along with NOT NULL, and it’s perfectly valid in MySQL. The DEFAULT value will be used only when you don’t provide a 
+value for that column during insert. If you provide a value, it will override the default.
+
+create table flightDetails4(flightName varchar(20),flightId int not null default 400);
+insert into flightDetails4(flightName) values('flight4');
+select * from flightDetails4;
+
+#UNIQUE constraints
+Use a unique constraint to ensure values in one or more columns are unique.
+
+2. For single columns, it guarantees that no two rows have the same value.
+3. For multiple columns, it ensures that the combination of values across the columns is unique.
+ex: CREATE TABLE course_enrollments (
+    student_id INT,
+    course_id INT,
+    enrollment_date DATE,
+    UNIQUE (student_id, course_id)  -- Ensure unique combination of student and course
+);
+use mydb;
+create table flightDetails55(flightName varchar(20) unique,flightId int(5) unique);
+insert into flightDetails55(flightName,flightID) values('flight8',8);
+select * from flightDetails5;
+
+#PRIMARY KEY :
+-A primary key is a field (or combination of fields) that uniquely identifies each record in a table.
+ It ensures that each record is unique and cannot have duplicate values in the primary key column(s).
+-Ensures that each record is unique and non-null.
+ 
+ use mydb;
+Create table flightDetails6(flightName varchar(20),flightId int(3), Primary key(flightId));
+insert into flightDetails6(flightName,flightId) values ('flight 6',6);
+
+
+#difference b/w Primary key and Unique key.
+Feature	                                     Primary Key	                              Unique Key
+Uniqueness	                                 Values must be unique.	                      Values must be unique.
+Nullability                                	 Cannot be NULL.	                          Can contain NULL values.
+Number per Table	                         Only one primary key per table.	          Multiple unique keys allowed per table.
+Index	                                     Automatically creates a unique index.	      Automatically creates a unique index.
+
+ex :
+CREATE TABLE users (
+    user_id INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE,    -- This column must be unique, but can be NULL
+    email VARCHAR(100) UNIQUE,      -- This column must be unique, but can also be NULL
+    password VARCHAR(255),
+    PRIMARY KEY (user_id)           -- This column is the primary key and cannot be NULL
+);

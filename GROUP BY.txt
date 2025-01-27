@@ -1,0 +1,72 @@
+# GROUP BY: used to group rows that have the same values in specified columns into summary rows. 
+            It is often used with aggregate functions (such as COUNT(), SUM(), AVG(), MIN(), MAX()) to perform calculations on each group of rows.
+
+
+create database business;
+use business;
+create table transactions(month varchar(25),day int(50),amount int(50),branch varchar(35));
+describe transactions;
+insert into transactions values('feb',13,124,'bangalore');
+insert into transactions values('feb',17,20400,'chicago');
+insert into transactions values('feb',212,320,'sydney');
+insert into transactions values('mar',22,96005200,'bangalore');
+insert into transactions values('mar',16,124,'chicago');
+insert into transactions values('apr',12,23,'sydney');
+insert into transactions values('jan',13,666,'bangalore');
+insert into transactions values('may',2,3111,'sydney');
+insert into transactions values('may',1,99999,'paris');
+insert into transactions values('jan',12,2000,'paris');
+update transactions set amount=5200 where month='mar' and day=16;
+
+#Rules and Conditions for GROUP BY:
+
+1. Columns in SELECT Must Be Either Grouped or Aggregated
+*All columns listed in the SELECT statement must either:
+-Be included in the GROUP BY clause (grouping columns).
+-Have an aggregate function applied to them (e.g., SUM(), COUNT(), AVG()).
+-Non-aggregated columns must be part of the GROUP BY clause
+
+#Incorrect
+SELECT product_id, amount, COUNT(*)
+FROM sales
+GROUP BY product_id;
+
+#Correct
+SELECT product_id, SUM(amount), COUNT(*)
+FROM sales
+GROUP BY product_id;
+
+2. HAVING Clause for Filtering Groups
+-The HAVING clause is used to filter groups after they have been created by the GROUP BY clause. It works like the WHERE clause but applies
+ to the grouped data.
+-You cannot use WHERE to filter on aggregated values. Use HAVING for that purpose.
+ex:1
+SELECT product_id, COUNT(*)
+FROM sales
+GROUP BY product_id
+HAVING COUNT(*) > 5;
+
+3. Group By Multiple Columns (Composite Grouping)
+-You can group by more than one column. When you do, SQL will create groups based on the unique combination of values across those columns.
+
+Example:
+SELECT product_id, sale_date, SUM(amount)
+FROM sales
+GROUP BY product_id, sale_date;
+
+select * from transactions;
+select sum(amount),month from transactions group by month;
+select sum(amount) from transactions;
+select max(amount), month from transactions group by month;
+select Min(Amount),month from Transactions group by month;
+select avg(amount),month from transactions group by month;
+
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+SELECT @@sql_mode;
+SET GLOBAL sql_mode = CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY');
+
+select count(*),month from transactions group by month;
+select count(*) from transactions;
+
+select count(*),month from transactions group by month having count(*)<2;
+select max(amount),branch from transactions where day=13 group by branch;
